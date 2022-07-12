@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+  <metadata>
+    <id>DocTechn</id>
+    <version>1.0.2</version>
+    <title>DocTechn</title>
+    <authors>MDemCode</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <description>
+	Library of technological document`s models.
+WARNING! An additional libraries (BasicSqlService.dll, ModelPLM.dll) is required to work properly!
+    </description>
+    <releaseNotes>tools</releaseNotes>
+    <copyright>Copyright MDemCode (C) 2022</copyright>
+    <tags>dokumenty technologiczne</tags>
+  </metadata>
+</package>

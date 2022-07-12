@@ -33,8 +33,11 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="PrzewodnikPLM, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\PrzewodnikPLM.1.3.2\lib\net461\PrzewodnikPLM.dll</HintPath>
+    <Reference Include="BasicSqlService">
+      <HintPath>..\..\dllki\BasicSqlService.dll</HintPath>
+    </Reference>
+    <Reference Include="ModelPLM, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\ModelPLM.1.0.1\lib\net461\ModelPLM.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -49,13 +52,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DocTechnTools.cs" />
+    <Compile Include="OperacjaAsprova.cs" />
     <Compile Include="DokumentTechnologiczny.cs" />
+    <Compile Include="KartyRozkrojow\KartaRozkrBlacha.cs" />
+    <Compile Include="KartyRozkrojow\KartaRozkroj.cs" />
+    <Compile Include="KartyRozkrojow\KartaRozkrProfil.cs" />
+    <Compile Include="KartyRozkrojow\KartaRozkrZbiorcza.cs" />
+    <Compile Include="KartyTechnologiczne\KartaTechnDetal.cs" />
+    <Compile Include="KartyTechnologiczne\KartaTechnMontaz.cs" />
     <Compile Include="KartyTechnologiczne\KartaTechnologiczna.cs" />
+    <Compile Include="KartyTechnologiczne\KartaTechnologiczna.Factory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="KartyRozkrojow\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
