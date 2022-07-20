@@ -30,7 +30,8 @@ namespace DocTechn.KartyTechnologiczne
         protected string _alertErrInfo;
         protected string _uwagi;
         //
-        public string Uwagi => _uwagi;
+        public string WczytaneUwagi => _uwagi;
+        public string DodanaUwaga { get; private set; }
         public int SztWyk => _sztWyk;
         public string SztWykTxt => _sztWyk == -1 ? $"{Szt} szt. [wszystkie]" : $"{_sztWyk} szt.";
         public bool Alert { get; private set; }
@@ -68,11 +69,11 @@ namespace DocTechn.KartyTechnologiczne
             Error         = false;
             _alertErrInfo = string.Empty;
         }
-        public void ZmienUwagi(string noweUwagi) {
-            _uwagi = noweUwagi;
+        public void UstawUwagiWczytaneDB(string uwagiDB) {
+            _uwagi = uwagiDB;
         }
         public void DodajUwage(string nowaUwaga) {
-            _uwagi += _uwagi.IsNullOrEmpty() ? $"* {nowaUwaga}"  : $"\n* {nowaUwaga}";
+            DodanaUwaga += DodanaUwaga.IsNullOrEmpty() ? $"* {nowaUwaga}"  : $"\n* {nowaUwaga}";
         }
         public void ZmienMiejsceSklad(string noweMiejsce) {
             MiejsceSkladowania = noweMiejsce;

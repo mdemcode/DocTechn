@@ -14,11 +14,12 @@ namespace DocTechn.KartyTechnologiczne
         private StatusWykonania? _statusWyk;
         //
         public DetalPLM Detal { get; }
+        public string NrPrzewodnika => Detal.NrPrzewodnika;
+        public bool Luzem => Detal.Luzem;
+        // override
         public override string NrGr => Detal.Grupa;
         public override string Lp => Detal.Lp;
         public override int Szt => Detal.Szt;
-        public string NrPrzewodnika => Detal.NrPrzewodnika;
-        public bool Luzem => Detal.Luzem;
         //
         public string Atest {
             get {
@@ -43,7 +44,7 @@ namespace DocTechn.KartyTechnologiczne
         public IEnumerable<string[]> DaneDbAsprova => _daneDbAsprova ??= WczytajDaneAsprova();
         private List<OperacjaAsprova> _operacjeAsprova;
         //
-        public override string ToolTipText => $"Miejsce składowania: {MiejsceSkladowania}\nUwagi:\n{Uwagi}\nWszystkie sztuki detalu: {Szt}\n{_alertErrInfo}";
+        public override string ToolTipText => $"Miejsce składowania: {MiejsceSkladowania}\nUwagi:\n{WczytaneUwagi}\nWszystkie sztuki detalu: {Szt}\n{_alertErrInfo}";
         //
         //public bool ZmianaTechnologii { get; set; } = false;
 
@@ -54,11 +55,10 @@ namespace DocTechn.KartyTechnologiczne
 
         /// <summary> Konstruktor tylko do celów pomocniczych (nie ustawia Detalu!) </summary>
         public KartaTechnDetal(string tekstKoduKresk, ZleceniePLM zlecPLM) : base(tekstKoduKresk, zlecPLM) { }
-        public KartaTechnDetal(ZleceniePLM zlecPLM, DetalPLM detal)
-            : base($"{zlecPLM.Kod:D3} {detal.NrPrzewodnika}", zlecPLM) {
-            Detal                      = detal;
+        public KartaTechnDetal(ZleceniePLM zlecPLM, DetalPLM detal) : base($"{zlecPLM.Kod:D3} {detal.NrPrzewodnika}", zlecPLM) {
+            Detal = detal;
             if (!Detal.DanePodstawoweWczytanePoprawnie) Bledy.Add("KD - Błąd wczytywania danych detalu!");
-            _sztWyk        = -1; // wszystkie szt.
+            _sztWyk = -1; // wszystkie szt.
         }
 
 
