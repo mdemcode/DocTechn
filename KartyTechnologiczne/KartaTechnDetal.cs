@@ -43,7 +43,7 @@ namespace DocTechn.KartyTechnologiczne
         public IEnumerable<string[]> DaneDbAsprova => _daneDbAsprova ??= WczytajDaneAsprova();
         private List<OperacjaAsprova> _operacjeAsprova;
         //
-        public override string ToolTipText => $"Miejsce składowania: {MiejsceSkladowania}\nUwagi: {Uwagi}\nWszystkie sztuki detalu: {Szt}\n{_alertErrInfo}";
+        public override string ToolTipText => $"Miejsce składowania: {MiejsceSkladowania}\nUwagi:\n{Uwagi}\nWszystkie sztuki detalu: {Szt}\n{_alertErrInfo}";
         //
         //public bool ZmianaTechnologii { get; set; } = false;
 

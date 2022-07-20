@@ -71,6 +71,9 @@ namespace DocTechn.KartyTechnologiczne
         public void ZmienUwagi(string noweUwagi) {
             _uwagi = noweUwagi;
         }
+        public void DodajUwage(string nowaUwaga) {
+            _uwagi += _uwagi.IsNullOrEmpty() ? $"* {nowaUwaga}"  : $"\n* {nowaUwaga}";
+        }
         public void ZmienMiejsceSklad(string noweMiejsce) {
             MiejsceSkladowania = noweMiejsce;
         }
