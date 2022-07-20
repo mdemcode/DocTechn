@@ -15,7 +15,7 @@ namespace DocTechn.KartyTechnologiczne
         public override StatusWykonania Status { get; }
         public override int Szt { get; }
         public override List<OperacjaAsprova> Operacje { get; }
-        public override string ToolTipText => $"Uwagi:\n{WczytaneUwagi}\nWszystkie sztuki elementu: {Szt}\n{_alertErrInfo}";
+        public override string ToolTipText => $"Uwagi:\n{WczytaneUwagi}\n{DodanaUwaga}\nWszystkie sztuki elementu: {Szt}\n{_alertErrInfo}";
         //
         public override string ToString() => $"{NrZlec} | {NrGr} | {Lp} | {SztWykTxt}";
 
