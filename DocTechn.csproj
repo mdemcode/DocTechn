@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DocTechnTools.cs" />
+    <Compile Include="KartyRozkrojow\KartaRozkroju.cs" />
     <Compile Include="OperacjaAsprova.cs" />
     <Compile Include="DokumentTechnologiczny.cs" />
     <Compile Include="KartyRozkrojow\KartaRozkrBlacha.cs" />

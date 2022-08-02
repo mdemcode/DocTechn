@@ -74,11 +74,13 @@ namespace DocTechn.KartyTechnologiczne
                                                                             "oper_80", "oper_90", "oper_100", "oper_110", "oper_120", "oper_130", "oper_140", "status_pozycji"},
                                                                         $"zlecenie = '{NrZlec}' AND nr_karty_tch = '{NrPrzewodnika}' ORDER BY id DESC",
                                                                         out string blad).ToList();
-            if (!blad.IsNullOrEmpty() || !daneDB.Any()) return new List<string[]>();
-            return daneDB;
+            if (blad.IsNullOrEmpty() && daneDB.Any()) return daneDB;
+            Bledy.Add("Detal nie wyeksportowany do Asprova!");
+            return new List<string[]>();
         }
         private List<OperacjaAsprova> WczytajOperacjeAsprova() { // DaneDbAsprova[2 - 15]
             List<OperacjaAsprova> operacjeAsprova = new ();
+            if (!DaneDbAsprova.Any()) return operacjeAsprova;
             // [oper_10] [oper_20] [oper_30] [oper_40] [oper_50] [oper_60] [oper_70] [oper_80] [oper_90] [oper_100] [oper_110] [oper_120] [oper_130] [oper_140]
             string[] daneOper = DaneDbAsprova.First();
             if (!daneOper[2].Trim().IsNullOrEmpty()) operacjeAsprova.Add(new OperacjaAsprova(TypOperacji.GilotynyDziurkarki, daneOper[2].Trim())); // 10
@@ -98,6 +100,11 @@ namespace DocTechn.KartyTechnologiczne
             return operacjeAsprova;
         }
         private void UstawAtestWytop() {
+            if (!DaneDbAsprova.Any()) {
+                _atest = "err";
+                _wytop = "err";
+                return;
+            }
             string[] daneFinal = DaneDbAsprova.First();
             _atest = (daneFinal[0].IsNullOrEmpty() || daneFinal[0] == "{NULL}") ? "[nie wpisano atestu]" : daneFinal[0];
             _wytop = (daneFinal[1].IsNullOrEmpty() || daneFinal[1] == "{NULL}") ? "[nie wpisano wytopu]" : daneFinal[1];

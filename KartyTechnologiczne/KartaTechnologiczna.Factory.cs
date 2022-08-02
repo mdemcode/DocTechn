@@ -29,6 +29,7 @@ namespace DocTechn.KartyTechnologiczne
                 return new KartaTechnDetal(zlec, detal);
             }
             public static KartaTechnDetal NowaKartaDetal(string kodKreskTxt, out bool blad) {
+                if (kodKreskTxt.Contains(" | ")) { return NowaKartaDetalQR(kodKreskTxt, out blad); }
                 blad = false;
                 string[] kodKreskSplit = kodKreskTxt.Split();
                 if (kodKreskSplit.Length != 2 || !int.TryParse(kodKreskSplit[0], out int kodZl)) {
@@ -43,7 +44,21 @@ namespace DocTechn.KartyTechnologiczne
                 DetalPLM detal = DetalPLM.Factory.NowyDetalWgIdZlecINumeruPrzewodnika(zl.IdDB, kodKreskSplit[1]);
                 return new KartaTechnDetal(zl, detal);
             }
-            /// <summary> Tylko dla potrzeb okreśenia DataContextu dla LbSkanowanePrzewodniki </summary>
+            private static KartaTechnDetal NowaKartaDetalQR(string kodKreskTxt, out bool blad) {
+                blad = false;
+                string[] kodKreskSplit = kodKreskTxt.Split('|');
+                if (kodKreskSplit.Length != 3) {
+                    blad = true; // błędny kod kreskowy
+                    return new KartaTechnDetal("", ZleceniePLM.Factory.NoweZlecenieWgKoduZl(0));
+                }
+                ZleceniePLM zl = ZleceniePLM.Factory.NoweZlecenieWgNumeruZl(kodKreskSplit[0].Trim());
+                if (!zl.ZlecenieWczytanePopr) {
+                    blad = true; // błąd wczytywania zlecenia
+                    return new KartaTechnDetal("", zl);
+                }
+                DetalPLM detal = DetalPLM.Factory.NowyDetalWgIdZlecINumeruPrzewodnika(zl.IdDB, kodKreskSplit[2].Trim());
+                return new KartaTechnDetal(zl, detal);
+            }/// <summary> Tylko dla potrzeb okreśenia DataContextu dla LbSkanowanePrzewodniki </summary>
             public static KartaTechnDetal NowaPustaKartaDetal() {
                 return new KartaTechnDetal("", ZleceniePLM.Factory.NoweZlecenieWgKoduZl(0));
             }

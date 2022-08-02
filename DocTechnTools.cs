@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace DocTechn
@@ -15,14 +13,18 @@ namespace DocTechn
         /// <summary> Określa typ karty technologicznej na podstawie tekstu z kodu kreskowego </summary>
         public static TypKartyTechn OkreslTypKarty(string tekstKoduKresk) { // ToDo - To będzie do zmiany !
             TypKartyTechn typOut;
-            // >>> przewodniki
-            if (IsBarcodeCorrect(tekstKoduKresk, @"^([0-9]{1,3}\s[0-9]{1,7}[\/]{0,1}.{0,})$")) typOut = TypKartyTechn.KartaDetal; 
-            // >>> karta rozkroju (blachy)
+            // >>> przewodniki QR [nrZlec | nrGr | nrPrzew]  /  przewodniki kod kresk. [kodZlec nrPrzew]
+            if (IsBarcodeCorrect(tekstKoduKresk.Trim(), @"^([0-9]{2}\.[0-9]{5}\..{1,3}\s\|\s.{1,}-\s\|\s[0-9]{1,7}[\/]{0,1}.{0,})$") 
+                || IsBarcodeCorrect(tekstKoduKresk, @"^([0-9]{1,3}\s[0-9]{1,7}[\/]{0,1}.{0,})$"))
+                typOut = TypKartyTechn.KartaDetal; 
+            // >>> karta rozkroju (blachy) - stara wersja
             else if(IsBarcodeCorrect(tekstKoduKresk, @"^([0-9]{1,}-[0-9]{1,})$") || IsBarcodeCorrect(tekstKoduKresk, @"^([0-9]{8})$"))  typOut = TypKartyTechn.KartaRozkrBlacha; 
-            // >>> karta rozkroju (profile)
+            // >>> karta rozkroju (profile) - stara wersja
             else if (IsBarcodeCorrect(tekstKoduKresk, @"^([0-9]{1,}\$[0-9]{1,})$"))  typOut = TypKartyTechn.KartaRozkrProfil; 
-            // >>> ktechnologia montaż
+            // >>> k. techn. montaż
             else if (IsBarcodeCorrect(tekstKoduKresk, @"^([0-9]{1,3}\s.{1,15}-\s[0-9]{1,5}[\/]{0,1}.{0,})$"))  typOut = TypKartyTechn.KartaMontaz; 
+            // >>> karta rozkroju PLM
+            else if (tekstKoduKresk.StartsWith("*MB"))  typOut = TypKartyTechn.KartaRozkrPLM; 
             // >>> bledny format kodu
             else  typOut = TypKartyTechn.BlednyKod; 
             //
@@ -35,6 +37,7 @@ namespace DocTechn
                 TypKartyTechn.KartaRozkrBlacha => "Karta rozkroju (blachy)",
                 TypKartyTechn.KartaRozkrProfil => "Karta rozkroju (profile)",
                 TypKartyTechn.KartaRozkrZbiorcza => "Zbiorcza karta rozkrojów",
+                TypKartyTechn.KartaRozkrPLM => "Karta rozkroju",
                 TypKartyTechn.BlednyKod => "Błędny kod!",
                 TypKartyTechn.NieOkreslony => "Nie określony - zeskanuj pierwszą ...",
                 _ => "Error",
@@ -63,6 +66,7 @@ namespace DocTechn
         KartaRozkrBlacha,
         KartaRozkrProfil,
         KartaRozkrZbiorcza,
+        KartaRozkrPLM,
         BlednyKod,
         NieOkreslony
     }

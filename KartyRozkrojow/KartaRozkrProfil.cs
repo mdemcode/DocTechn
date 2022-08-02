@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DocTechn.KartyRozkrojow
 {
-    /// <summary> Karta rozkroju profile </summary>
+    /// <summary> Karta rozkroju profile - do usunięcia - zrobiono jedną klasę dla blach i profili: KartaRozkroju </summary>
     public class KartaRozkrProfil : KartaRozkroj {
 
         public RozkrojPLM Rozkroj { get; private set; }

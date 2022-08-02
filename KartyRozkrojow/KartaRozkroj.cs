@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace DocTechn.KartyRozkrojow
 {
+    //  - do usunięcia - zrobiono jedną klasę dla blach i profili: KartaRozkroju
     public abstract class KartaRozkroj : DokumentTechnologiczny {
 
         protected KartaRozkroj(string tekstKoduKresk) : base(tekstKoduKresk) { }
