@@ -53,14 +53,14 @@ namespace DocTechn.KartyTechnologiczne
             return $"{NrZlec} | {gr} | {NrPrzewodnika} | {SztWykTxt} | At. {Atest} | Wyt. {Wytop}";
         }
 
+
         /// <summary> Konstruktor tylko do celów pomocniczych (nie ustawia Detalu!) </summary>
         public KartaTechnDetal(string tekstKoduKresk, ZleceniePLM zlecPLM) : base(tekstKoduKresk, zlecPLM) { }
-        public KartaTechnDetal(ZleceniePLM zlecPLM, DetalPLM detal) : base($"{zlecPLM.Kod:D3} {detal.NrPrzewodnika}", zlecPLM) {
+        public KartaTechnDetal(ZleceniePLM zlecPLM, DetalPLM detal) : base($"{zlecPLM.Nr} | {detal.Grupa} | {detal.NrPrzewodnika}", zlecPLM) { // {zlecPLM.Kod:D3} {detal.NrPrzewodnika}
             Detal = detal;
             if (!Detal.DanePodstawoweWczytanePoprawnie) Bledy.Add("KD - Błąd wczytywania danych detalu!");
             _sztWyk = -1; // wszystkie szt.
         }
-
 
         public void ZmienAtestWytop(string nowyAtest, string nowyWytop) {
             _atest = nowyAtest;
@@ -117,8 +117,5 @@ namespace DocTechn.KartyTechnologiczne
             return StatusWykonania.Nieznany;
         }
 
-        //protected override bool OdczytajDaneWgKoduKresk(string kodKresk) {
-        //    throw new NotImplementedException();
-        //}
     }
 }
