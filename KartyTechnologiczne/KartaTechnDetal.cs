@@ -106,8 +106,8 @@ namespace DocTechn.KartyTechnologiczne
                 return;
             }
             string[] daneFinal = DaneDbAsprova.First();
-            _atest = (daneFinal[0].IsNullOrEmpty() || daneFinal[0] == "{NULL}") ? "[nie wpisano atestu]" : daneFinal[0];
-            _wytop = (daneFinal[1].IsNullOrEmpty() || daneFinal[1] == "{NULL}") ? "[nie wpisano wytopu]" : daneFinal[1];
+            _atest = (daneFinal[0].IsNullOrEmpty() || daneFinal[0] == "{NULL}") ? "[nie wpisano]" : daneFinal[0];
+            _wytop = (daneFinal[1].IsNullOrEmpty() || daneFinal[1] == "{NULL}") ? "[nie wpisano]" : daneFinal[1];
         }
         private StatusWykonania UstawStatusWykonania() {
             if (Operacje is null || !Operacje.Any()) return StatusWykonania.Nieznany; // nie zaimportowane do Asprovy
