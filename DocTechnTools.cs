@@ -5,10 +5,20 @@ namespace DocTechn
 {
     public static class DocTechnTools {
 
-        //#region EXTENSIONS
+        #region EXTENSIONS
+        public static string DopiszZeraWiodace(this string inTxt) {
+            string   outTxt        = inTxt;
+            string[] splitted      = inTxt.Split('/', '_', '-');
+            int      ileZnakowMaNr = splitted[0].Length;
+            if (ileZnakowMaNr >= 5) return outTxt;
+            for (int i = 0; i < 5 - ileZnakowMaNr; i++) {
+                outTxt = "0" + outTxt;
+            }
+            return outTxt;
+        }
         //public static int? ParseToIntOrNull(this string input) => int.TryParse(input, out int result) ? result : null;
         //public static bool IsNullOrEmpty(this string oryg) => oryg is null || oryg.Length == 0 || oryg.Equals(""); //string.IsNullOrEmpty(oryg); // >> BasicSqlService.Helpers;
-        //#endregion
+        #endregion
 
         /// <summary> Określa typ karty technologicznej na podstawie tekstu z kodu kreskowego </summary>
         public static TypKartyTechn OkreslTypKarty(string tekstKoduKresk) { // ToDo - To będzie do zmiany !
@@ -24,7 +34,7 @@ namespace DocTechn
             // >>> k. techn. montaż
             else if (IsBarcodeCorrect(tekstKoduKresk, @"^([0-9]{1,3}\s.{1,15}-\s[0-9]{1,5}[\/]{0,1}.{0,})$"))  typOut = TypKartyTechn.KartaMontaz; 
             // >>> karta rozkroju PLM
-            else if (tekstKoduKresk.StartsWith("*MB"))  typOut = TypKartyTechn.KartaRozkrPLM; 
+            else if (tekstKoduKresk.StartsWith("*MB") || tekstKoduKresk.StartsWith("MB") || tekstKoduKresk.StartsWith("*MT") || tekstKoduKresk.StartsWith("MT"))  typOut = TypKartyTechn.KartaRozkrPLM; 
             // >>> bledny format kodu
             else  typOut = TypKartyTechn.BlednyKod; 
             //

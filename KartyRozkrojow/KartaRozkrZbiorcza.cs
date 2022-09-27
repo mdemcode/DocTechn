@@ -16,15 +16,15 @@ namespace DocTechn.KartyRozkrojow
 
 
         public KartaRozkrZbiorcza(string tekstKoduKresk) : base(tekstKoduKresk) {
-            int nesId = OdczytajIdZKoduKresk(tekstKoduKresk);
-            Nesting = new NestingPLM(nesId);
+            int nesBon = OdczytajIdZKoduKresk(tekstKoduKresk);
+            Nesting = new NestingPLM(nesBon);
             if (!Nesting.RozkrojeWczytanePoprawnie) Bledy.Add($"Błąd wczytywania Nesting`u: {tekstKoduKresk}!");
         }
 
 
         protected sealed override int OdczytajIdZKoduKresk(string kodKresk) {
-            // ToDo gdy będzie już znana postać kodu kreskowego karty Rozkrojow
-            return -1;
+            string nesBonTxt = kodKresk.Substring(3, 5);
+            return int.TryParse(nesBonTxt, out int nesBon) ? nesBon : -1;
         }
     }
 }

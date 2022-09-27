@@ -15,7 +15,7 @@ namespace DocTechn.KartyRozkrojow
         }
 
         private int OdczytajIdZKoduKresk(string kodKresk) {
-            if (!kodKresk.StartsWith("*MB")) {
+            if (!kodKresk.StartsWith("*MB") && !kodKresk.StartsWith("*MT") && !kodKresk.StartsWith("MB") && !kodKresk.StartsWith("MT")) {
                 Bledy.Add($"Błąd wczytywania rozkroju - błędny kod kresk.: {kodKresk}");
                 return -1;
             }

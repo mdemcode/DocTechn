@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using BasicSqlService;
 using ModelPLM;
 
@@ -10,11 +11,13 @@ namespace DocTechn.KartyTechnologiczne
 
         public override string NrGr { get; }
         public override string Lp { get; }
+        private string LpWgKoduProton => UtworzLpProton();
         public override bool Hold { get; }
         public override bool Uwolniony { get; }
         public override StatusWykonania Status { get; }
         public override int Szt { get; }
-        public override List<OperacjaAsprova> Operacje { get; }
+        //public override List<OperacjaAsprova> Operacje { get; }
+        public override List<OperacjaRozpProton> Operacje { get; }
         public override string ToolTipText => $"Uwagi:\n{WczytaneUwagi}\n{DodanaUwaga}\nWszystkie sztuki elementu: {Szt}\n{_alertErrInfo}";
         //
         public override string ToString() => $"{NrZlec} | {NrGr} | {Lp} | {SztWykTxt}";
@@ -28,31 +31,45 @@ namespace DocTechn.KartyTechnologiczne
             _sztWyk                    = -1;                                // wszystkie szt.
             Lp                         = kodKrSplit[kodKrSplit.Length - 1]; // ostatnia pozycja tablicy
             NrGr                       = OkreslNrGr(kodKrSplit);
-            if (WczytajDaneZAsprovy(out string[] daneAsprova)) {
-                Szt       = (daneAsprova[0].IsNullOrEmpty() || daneAsprova[0].Equals("{NULL}")) ? -1 : int.Parse(daneAsprova[0], NumberStyles.AllowDecimalPoint);
-                Hold      = !daneAsprova[1].IsNullOrEmpty() && daneAsprova[1].Equals("HOLD");
-                Uwolniony = !daneAsprova[1].IsNullOrEmpty() && daneAsprova[1].Equals("UWOLNIONE");
-                Operacje = new List<OperacjaAsprova> {
-                    new(TypOperacji.Montaz, daneAsprova[2]),
-                    new(TypOperacji.Spawanie, daneAsprova[3]),
-                    new(TypOperacji.Frezarka, daneAsprova[4])
+            if (WczytajDaneProton(out string[] daneProton)) {
+                Szt       = daneProton[0].IsNullOrEmpty() || daneProton[0].Equals("{NULL}") ? -1 : int.Parse(daneProton[0]);
+                Hold      = false; //!daneAsprova[1].IsNullOrEmpty() && daneAsprova[1].Equals("HOLD");
+                Uwolniony = true; //!daneAsprova[1].IsNullOrEmpty() && daneAsprova[1].Equals("UWOLNIONE");
+                Operacje = new List<OperacjaRozpProton> {
+                    new(OperacjaRozpProton.TypOperacji.SkladaniePozycji, daneProton[1]),
+                    new(OperacjaRozpProton.TypOperacji.SpawaniePozycji, daneProton[2]),
+                    new(OperacjaRozpProton.TypOperacji.FrezowaniePozycji, daneProton[3])
                 };
-                Status = UstawStatusWykonania(daneAsprova[2], daneAsprova[3], daneAsprova[4]);
+                Status = UstawStatusWykonania(daneProton[1], daneProton[2], daneProton[3]);
             }
-            else Bledy.Add("KM - Błąd wczytywania danych z Asprovy!");
+            else Bledy.Add("KM - Błąd wczytywania danych z rozpiski Proton!");
+        }
+
+        private bool WczytajDaneProton(out string[] daneOut) {
+            daneOut = null;
+            string polecenieSQL = "SELECT lp.Ilosc_szt, lp.Skladania_WKE_id, lp.Spawanie_WKE_id, lp.Frezowanie_WKE_id " +
+                                  "FROM ROZ_POZYCJE_WKE AS lp INNER JOIN " +
+                                        "ROZ_GRUPY AS g ON lp.Grupa_id = g.Id INNER JOIN " +
+                                        "PROJ_NAGLOWKI_PROJEKTOW AS p ON g.Naglowek_Projektu_id = p.Id " +
+                                  $"WHERE (p.Numer_projektu = '{NrZlec}') AND (g.Numer_grupy = '{NrGr}') AND (g.Nr_pozycji_WW = '{LpWgKoduProton}')";
+            IEnumerable<string[]> daneDB = SqlService.PobierzDaneZBazy(BazaDanych.Proton, polecenieSQL, 4, out string blad).ToList();
+            bool                  ok     = daneDB.Any();
+            if (ok) daneOut = daneDB.First();
+            return ok; //true;
         }
 
         /// <summary> { szt, hold, składanie, spawanie, frezarka } </summary>
-        private bool WczytajDaneZAsprovy(out string[] daneOut) {
-            daneOut = null;
-            bool ok = SqlService.PobierzPojedynczyWiersz(BazaDanych.Asprova,
-                                                         "ut_eq_z1_rm_tech_arch",
-                                                         new[] {"ilosc", "status_pozycji", "oper_10", "oper_20", "oper_30"},
-                                                         $"zlecenie = '{NrZlec}' AND grupa = '{NrGr}' AND nrpoz_wys = '{Lp}'",
-                                                         out string[] elementDB);
-            if (ok) daneOut = elementDB;
-            return ok; //true;
-        }
+        //private bool WczytajDaneAsprovy(out string[] daneOut) {
+        //    daneOut = null;
+        //    bool ok = SqlService.PobierzPojedynczyWiersz(BazaDanych.Asprova,
+        //                                                 "ut_eq_z1_rm_tech_arch",
+        //                                                 new[] {"ilosc", "status_pozycji", "oper_10", "oper_20", "oper_30"},
+        //                                                 $"zlecenie = '{NrZlec}' AND grupa = '{NrGr}' AND nrpoz_wys = '{Lp}'",
+        //                                                 out string[] elementDB);
+        //    if (ok) daneOut = elementDB;
+        //    return ok; //true;
+        //}
+
         private static string OkreslNrGr(string[] kodKrSplit) {
             string grTmp = kodKrSplit[1];
             // Bug !!! skaner nie czyta '_' ("podłogi") - zamienia na spację. Poniżej tymczasowe rozwiązanie problemu
@@ -74,9 +91,10 @@ namespace DocTechn.KartyTechnologiczne
                 (_, _, _) => StatusWykonania.Nieznany
             };
         }
-
-        //protected override bool OdczytajDaneWgKoduKresk(string kodKresk) {
-        //    throw new NotImplementedException();
-        //}
+        private string UtworzLpProton() {
+            string zlecPart = NrZlec.Substring(0, 8);
+            string lpPart   = Lp.DopiszZeraWiodace();
+            return $"{zlecPart}/{lpPart}";
+        }
     }
 }

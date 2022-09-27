@@ -23,7 +23,8 @@ namespace DocTechn.KartyTechnologiczne
         public abstract StatusWykonania Status { get; }
         /// <summary> Ilość sztuk detalu (przewodnik) lub elementu (karta montaż) </summary>
         public abstract int Szt { get; }
-        public abstract List<OperacjaAsprova> Operacje { get; }
+        //public abstract List<OperacjaAsprova> Operacje { get; }
+        public abstract List<OperacjaRozpProton> Operacje { get; }
         public abstract string ToolTipText { get; }
         //
         protected int _sztWyk;
