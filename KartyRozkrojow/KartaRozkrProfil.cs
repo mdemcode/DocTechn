@@ -19,7 +19,7 @@ namespace DocTechn.KartyRozkrojow
         }
 
         protected sealed override int OdczytajIdZKoduKresk(string kodKresk) {
-            // ToDo gdy będzie już znana postać kodu kreskowego karty Rozkrojow
+            // 
             return -1;
         }
 

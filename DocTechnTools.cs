@@ -21,7 +21,7 @@ namespace DocTechn
         #endregion
 
         /// <summary> Określa typ karty technologicznej na podstawie tekstu z kodu kreskowego </summary>
-        public static TypKartyTechn OkreslTypKarty(string tekstKoduKresk) { // ToDo - To będzie do zmiany !
+        public static TypKartyTechn OkreslTypKarty(string tekstKoduKresk) {
             TypKartyTechn typOut;
             // >>> przewodniki QR [nrZlec | nrGr | nrPrzew]  /  przewodniki kod kresk. [kodZlec nrPrzew]
             if (IsBarcodeCorrect(tekstKoduKresk.Trim(), @"^([0-9]{2}\.[0-9]{5}\..{1,3}\s\|\s.{1,}-\s\|\s[0-9]{1,7}[\/]{0,1}.{0,})$") 
