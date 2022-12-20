@@ -24,8 +24,9 @@ namespace DocTechn
         public static TypKartyTechn OkreslTypKarty(string tekstKoduKresk) {
             TypKartyTechn typOut;
             // >>> przewodniki QR [nrZlec | nrGr | nrPrzew]  /  przewodniki kod kresk. [kodZlec nrPrzew]
-            if (IsBarcodeCorrect(tekstKoduKresk.Trim(), @"^([0-9]{2}\.[0-9]{5}\..{1,3}\s\|\s.{1,}-\s\|\s[0-9]{1,7}[\/]{0,1}.{0,})$") 
-                || IsBarcodeCorrect(tekstKoduKresk, @"^([0-9]{1,3}\s[0-9]{1,7}[\/]{0,1}.{0,})$"))
+            string kodBezGwiazdek = tekstKoduKresk.Substring(1, tekstKoduKresk.Length - 2);
+            if (IsBarcodeCorrect(kodBezGwiazdek.Trim(), @"^([0-9]{2}\.[0-9]{5}\..{1,3}\s\|\s.{1,}-\s\|\s[0-9]{1,7}[\/]{0,1}.{0,})$") 
+                || IsBarcodeCorrect(kodBezGwiazdek, @"^([0-9]{1,3}\s[0-9]{1,7}[\/]{0,1}.{0,})$"))
                 typOut = TypKartyTechn.KartaDetal; 
             // >>> karta rozkroju (blachy) - stara wersja
             else if(IsBarcodeCorrect(tekstKoduKresk, @"^([0-9]{1,}-[0-9]{1,})$") || IsBarcodeCorrect(tekstKoduKresk, @"^([0-9]{8})$"))  
