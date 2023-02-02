@@ -23,13 +23,13 @@ namespace DocTechn.KartyTechnologiczne
         //
         public string Atest {
             get {
-                if (_atest.IsNullOrEmpty()) UstawAtestWytopProton(); // '[nie wpisano]' jeśli null or empty w DB
+                if (_atest.IsNullOrEmpty()) UstawAtestWytopProton();
                 return _atest;
             }
         }
         public string Wytop {
             get {
-                if (_wytop.IsNullOrEmpty()) UstawAtestWytopProton(); // '[nie wpisano]' jeśli null or empty w DB
+                if (_wytop.IsNullOrEmpty()) UstawAtestWytopProton();
                 return _wytop;
             }
         }
@@ -73,11 +73,19 @@ namespace DocTechn.KartyTechnologiczne
         }
 
         public void ZmienAtestWytop(string nowyAtest, string nowyWytop) {
+            string polecenieSQL = $"UPDATE det " +
+                                  $"SET    Atest = '{nowyAtest}', Wytop = '{nowyWytop}' " +
+                                  $"FROM   ROZ_DETALE AS det INNER JOIN " +
+                                  $"       ROZ_POZYCJE_WKE AS lpON det.Pozycja_WKE_id = lp.Id INNER JOIN " +
+                                  $"       ROZ_GRUPY AS gr ON lp.Grupa_id = gr.Id INNER JOIN " +
+                                  $"       PROJ_NAGLOWKI_PROJEKTOW AS zl ON gr.Naglowek_Projektu_id = zl.Id " +
+                                  $"WHERE  (det.Numer_karty_tech = '{NrPrzewodnika}') AND (gr.Numer_grupy = '{NrGr}') AND (zl.Numer_projektu = '{NrZlec}')";
+            _ = SqlService.ZapiszDoBazyNowyLubZmiany(BazaDanych.Proton, polecenieSQL);
             _atest = nowyAtest;
             _wytop = nowyWytop;
         }
         // OPERACJE Z ROZPISKI PROTON
-        // UWAGA! W tabeli ROZ_DETALE może być kilka pozycji tego samego detalu (wg WKE?)
+        // UWAGA! W tabeli ROZ_DETALE może być kilka pozycji tego samego detalu - dla każdej POZ_WW oddzielnie
         private IEnumerable<string[]> WczytajDaneProton() {
             string polecenieSQL = "SELECT d.Atest, d.Wytop, d.Gilotyny_dziurkarki_id, d.Prostowanie_id, d.Pily_id, d.Palniki_id, d.Przekazanie_id, d.Wiertarki_id, " + 
                                             "d.Obrobka_krawedzi_id, d.Spawanie_blachownic_id, d.Fazy_id, d.Laser_id, d.Plazma_id, d.Frezarka_id, d.Kooperacja_id, " +
@@ -155,9 +163,9 @@ namespace DocTechn.KartyTechnologiczne
                 return;
             }
             string atest = DaneDbProton.All(d => d[0] == "{NULL}") ? DaneDbProton.First()[0] : DaneDbProton.First(d => d[0] != "{NULL}")[0];
-            _atest = (atest.IsNullOrEmpty() || atest == "{NULL}") ? "[nie wpisano]" : atest;
+            _atest = (atest.IsNullOrEmpty() || atest == "{NULL}") ? string.Empty : atest;
             string wytop = DaneDbProton.All(d => d[1] == "{NULL}") ? DaneDbProton.First()[1] : DaneDbProton.First(d => d[1] != "{NULL}")[1];
-            _wytop = (wytop.IsNullOrEmpty() || wytop == "{NULL}") ? "[nie wpisano]" : wytop;
+            _wytop = (wytop.IsNullOrEmpty() || wytop == "{NULL}") ? string.Empty : wytop;
         }
         private StatusWykonania UstawStatusWykonania() {
             if (Operacje is null || !Operacje.Any()) return StatusWykonania.Nieznany; // nie znalezione w rozpisceProton

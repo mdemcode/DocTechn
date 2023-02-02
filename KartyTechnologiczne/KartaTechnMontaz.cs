@@ -11,7 +11,7 @@ namespace DocTechn.KartyTechnologiczne
 
         public override string NrGr { get; }
         public override string Lp { get; }
-        private string LpWgKoduProton => UtworzLpProton();
+        //private string LpWgKoduProton => UtworzLpProton(); // zmienione na zwykłe Lp
         public override bool Hold { get; }
         public override bool Uwolniony { get; }
         public override StatusWykonania Status { get; }
@@ -51,7 +51,7 @@ namespace DocTechn.KartyTechnologiczne
                                   "FROM ROZ_POZYCJE_WKE AS lp INNER JOIN " +
                                         "ROZ_GRUPY AS g ON lp.Grupa_id = g.Id INNER JOIN " +
                                         "PROJ_NAGLOWKI_PROJEKTOW AS p ON g.Naglowek_Projektu_id = p.Id " +
-                                  $"WHERE (p.Numer_projektu = '{NrZlec}') AND (g.Numer_grupy = '{NrGr}') AND (g.Nr_pozycji_WW = '{LpWgKoduProton}')";
+                                  $"WHERE (p.Numer_projektu = '{NrZlec}') AND (g.Numer_grupy = '{NrGr}') AND (lp.Nr_pozycji_WW = '{Lp}')";
             IEnumerable<string[]> daneDB = SqlService.PobierzDaneZBazy(BazaDanych.Proton, polecenieSQL, 4, out string blad).ToList();
             bool                  ok     = daneDB.Any();
             if (ok) daneOut = daneDB.First();
@@ -91,10 +91,10 @@ namespace DocTechn.KartyTechnologiczne
                 (_, _, _) => StatusWykonania.Nieznany
             };
         }
-        private string UtworzLpProton() {
-            string zlecPart = NrZlec.Substring(0, 8);
-            string lpPart   = Lp.DopiszZeraWiodace();
-            return $"{zlecPart}/{lpPart}";
-        }
+        //private string UtworzLpProton() {
+        //    string zlecPart = NrZlec.Substring(0, 8);
+        //    string lpPart   = Lp.DopiszZeraWiodace();
+        //    return $"{zlecPart}/{lpPart}";
+        //}
     }
 }

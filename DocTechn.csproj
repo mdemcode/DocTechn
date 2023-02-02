@@ -37,7 +37,7 @@
       <HintPath>..\..\dllki\BasicSqlService.dll</HintPath>
     </Reference>
     <Reference Include="ModelPLM, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\ModelPLM.1.0.4\lib\net461\ModelPLM.dll</HintPath>
+      <HintPath>packages\ModelPLM.1.0.6\lib\net461\ModelPLM.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
