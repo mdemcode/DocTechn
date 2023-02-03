@@ -4,10 +4,6 @@ namespace DocTechn
 {
     public class OperacjaAsprova {
 
-        public TypOperacji Typ { get; }
-        public string Brygada { get; }
-        public StatusOperacji Status { get; }
-
         public OperacjaAsprova(TypOperacji typ, string brygada) {
             Typ     = typ;
             Brygada = brygada;
@@ -19,6 +15,10 @@ namespace DocTechn
                     _ => StatusOperacji.Wydana // symbol brygady
                 };
         }
+
+        public TypOperacji Typ { get; }
+        public string Brygada { get; }
+        public StatusOperacji Status { get; }
 
     }
 
@@ -51,5 +51,4 @@ namespace DocTechn
         //
         Wszystkie = -1       // O14  //
     }
-
 }

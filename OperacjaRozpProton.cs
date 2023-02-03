@@ -4,10 +4,6 @@ namespace DocTechn
 {
     public class OperacjaRozpProton {
 
-        public TypOperacji Typ { get; }
-        public string Brygada { get; } // wg tabeli SLO_BRYGADY w Bazie proton (Id - int)
-        public StatusOperacji Status { get; }
-
         public OperacjaRozpProton(TypOperacji typ, string brygada) {
             Typ     = typ;
             Brygada = brygada;
@@ -19,6 +15,10 @@ namespace DocTechn
                     _ => StatusOperacji.Wydana        // symbol brygady
                 };
         }
+
+        public TypOperacji Typ { get; }
+        public string Brygada { get; } // wg tabeli SLO_BRYGADY w Bazie proton (Id - int)
+        public StatusOperacji Status { get; }
 
         public enum StatusOperacji {
             Brak,

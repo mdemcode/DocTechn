@@ -1,18 +1,17 @@
 ﻿using BasicSqlService;
 using ModelPLM;
-using System;
 
 namespace DocTechn.KartyRozkrojow
 {
     public class KartaRozkroju : DokumentTechnologiczny {
-        
-        public RozkrojPLM Rozkroj { get; private set; }
 
         public KartaRozkroju(string tekstKoduKresk) : base(tekstKoduKresk) {
             int idRozkr = OdczytajIdZKoduKresk(tekstKoduKresk);
             Rozkroj = new RozkrojPLM(idRozkr);
             if (!Rozkroj.RozkrojWczytanyPoprawnie) Bledy.Add($"Błąd wczytywania rozkroju: {tekstKoduKresk}");
         }
+        
+        public RozkrojPLM Rozkroj { get; private set; }
 
         private int OdczytajIdZKoduKresk(string kodKresk) {
             if (!kodKresk.StartsWith("*MB") && !kodKresk.StartsWith("*MT") && !kodKresk.StartsWith("MB") && !kodKresk.StartsWith("MT")) {

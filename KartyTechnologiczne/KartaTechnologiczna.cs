@@ -8,6 +8,11 @@ namespace DocTechn.KartyTechnologiczne
 {
     public abstract partial class KartaTechnologiczna : DokumentTechnologiczny {
 
+        public KartaTechnologiczna(string tekstKoduKresk, ZleceniePLM zlecPLM) : base(tekstKoduKresk) {
+            if (zlecPLM is null || !zlecPLM.ZlecenieWczytanePopr) Bledy.Add("Błąd wczytywania zlecenia!");
+            _zlecenie = zlecPLM;
+        }
+
         // ZLECENIE
         protected readonly ZleceniePLM _zlecenie;
         public int IdZlecDB => _zlecenie.IdDB;
@@ -26,6 +31,7 @@ namespace DocTechn.KartyTechnologiczne
         //public abstract List<OperacjaAsprova> Operacje { get; }
         public abstract List<OperacjaRozpProton> Operacje { get; }
         public abstract string ToolTipText { get; }
+        public abstract string MiejsceSkladowania { get; protected set; }
         //
         protected int _sztWyk;
         protected string _alertErrInfo;
@@ -38,14 +44,7 @@ namespace DocTechn.KartyTechnologiczne
         public bool Alert { get; private set; }
         public bool Error { get; private set; }
         public string AlertErrInfo => _alertErrInfo;
-        public string MiejsceSkladowania { get; protected set; }
         //
-
-
-        public KartaTechnologiczna(string tekstKoduKresk, ZleceniePLM zlecPLM) : base(tekstKoduKresk) {
-            if (zlecPLM is null || !zlecPLM.ZlecenieWczytanePopr) Bledy.Add("Błąd wczytywania zlecenia!");
-            _zlecenie = zlecPLM;
-        }
 
         public bool ZmienSztWyk(int szt) {
             if (szt > Szt || szt < 1) return false;
@@ -76,9 +75,9 @@ namespace DocTechn.KartyTechnologiczne
         public void DodajUwage(string nowaUwaga) {
             DodanaUwaga += DodanaUwaga.IsNullOrEmpty() ? $"* {nowaUwaga}"  : $"\n* {nowaUwaga}";
         }
-        public void ZmienMiejsceSklad(string noweMiejsce) {
-            MiejsceSkladowania = noweMiejsce;
-        }
+
+        // ABSTRACT
+        public abstract void ZmienMiejsceSklad(string noweMiejsce);
 
     }
 

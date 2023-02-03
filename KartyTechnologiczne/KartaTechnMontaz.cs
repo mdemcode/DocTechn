@@ -9,19 +9,6 @@ namespace DocTechn.KartyTechnologiczne
 {
     public class KartaTechnMontaz : KartaTechnologiczna {
 
-        public override string NrGr { get; }
-        public override string Lp { get; }
-        //private string LpWgKoduProton => UtworzLpProton(); // zmienione na zwykłe Lp
-        public override bool Hold { get; }
-        public override bool Uwolniony { get; }
-        public override StatusWykonania Status { get; }
-        public override int Szt { get; }
-        //public override List<OperacjaAsprova> Operacje { get; }
-        public override List<OperacjaRozpProton> Operacje { get; }
-        public override string ToolTipText => $"Uwagi:\n{WczytaneUwagi}\n{DodanaUwaga}\nWszystkie sztuki elementu: {Szt}\n{_alertErrInfo}";
-        //
-        public override string ToString() => $"{NrZlec} | {NrGr} | {Lp} | {SztWykTxt}";
-
         public KartaTechnMontaz(string tekstKoduKresk, ZleceniePLM zlecPLM) : base(tekstKoduKresk, zlecPLM) {
             string[] kodKrSplit = tekstKoduKresk.Trim().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             if (kodKrSplit.Length < 3) {
@@ -43,6 +30,23 @@ namespace DocTechn.KartyTechnologiczne
                 Status = UstawStatusWykonania(daneProton[1], daneProton[2], daneProton[3]);
             }
             else Bledy.Add("KM - Błąd wczytywania danych z rozpiski Proton!");
+        }
+
+        public override string NrGr { get; }
+        public override string Lp { get; }
+        //private string LpWgKoduProton => UtworzLpProton(); // zmienione na zwykłe Lp
+        public override bool Hold { get; }
+        public override bool Uwolniony { get; }
+        public override StatusWykonania Status { get; }
+        public override int Szt { get; }
+        //public override List<OperacjaAsprova> Operacje { get; }
+        public override List<OperacjaRozpProton> Operacje { get; }
+        public override string ToolTipText => $"Uwagi:\n{WczytaneUwagi}\n{DodanaUwaga}\nWszystkie sztuki elementu: {Szt}\n{_alertErrInfo}";
+        public override string MiejsceSkladowania { get; protected set; }
+        //
+        public override string ToString() => $"{NrZlec} | {NrGr} | {Lp} | {SztWykTxt}";
+        public override void ZmienMiejsceSklad(string noweMiejsce) {
+            MiejsceSkladowania = noweMiejsce;
         }
 
         private bool WczytajDaneProton(out string[] daneOut) {
