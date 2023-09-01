@@ -33,8 +33,9 @@ namespace DocTechn
                 typOut = TypKartyTechn.KartaRozkrBlacha; 
             // >>> karta rozkroju (profile) - stara wersja
             else if (IsBarcodeCorrect(tekstKoduKresk, @"^([0-9]{1,}\$[0-9]{1,})$"))  typOut = TypKartyTechn.KartaRozkrProfil; 
-            // >>> k. techn. montaż
-            else if (IsBarcodeCorrect(tekstKoduKresk, @"^([0-9]{1,3}\s.{1,15}-\s[0-9]{1,5}[\/]{0,1}.{0,})$"))  typOut = TypKartyTechn.KartaMontaz; 
+            // >>> k. techn. montaż (wersja z kodem zl. / wersja z numerem zl.)
+            else if (IsBarcodeCorrect(tekstKoduKresk, @"^([0-9]{1,3}\s.{1,15}-\s[0-9]{1,5}[\/]{0,1}.{0,})$") 
+                     || IsBarcodeCorrect(tekstKoduKresk, @"^([0-9]{2}\.[0-9]{5}\..{1,3}\s.{1,15}-\s[0-9]{1,5}[\/]{0,1}.{0,})$"))  typOut = TypKartyTechn.KartaMontaz; 
             // >>> karta rozkroju PLM
             else if (tekstKoduKresk.StartsWith("*MB") || tekstKoduKresk.StartsWith("MB") || tekstKoduKresk.StartsWith("*MT") || tekstKoduKresk.StartsWith("MT"))  
                 typOut = (tekstKoduKresk.EndsWith("000*") || tekstKoduKresk.EndsWith("000")) ? TypKartyTechn.KartaRozkrZbiorcza : TypKartyTechn.KartaRozkrPLM; 
