@@ -75,7 +75,16 @@ namespace DocTechn.KartyTechnologiczne
                 ZleceniePLM zl = ZleceniePLM.Factory.NoweZlecenieWgKoduZl(kodZl);
                 return new KartaTechnMontaz(kodKreskTxt, zl);
             }
-            /// <summary> Tylko dla potrzeb okreśenia DataContextu dla LbSkanowanePrzewodniki </summary>
+            public static KartaTechnMontaz NowaKartaMontazPLM(string kodKreskTxt, out bool blad) {
+                blad = false;
+                string[] kodKrSplit = kodKreskTxt.Trim().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                if (kodKrSplit.Length < 3) {
+                    blad = true;                                                                  // błędny kod kreskowy
+                    return new KartaTechnMontaz("", ZleceniePLM.Factory.NoweZlecenieWgKoduZl(0)); // ZlecenieWczytanePoprawnie -> false
+                }
+                ZleceniePLM zl = ZleceniePLM.Factory.NoweZlecenieWgNumeruZl(kodKrSplit[0]);
+                return new KartaTechnMontaz(kodKreskTxt, zl);
+            }/// <summary> Tylko dla potrzeb okreśenia DataContextu dla LbSkanowanePrzewodniki </summary>
             public static KartaTechnMontaz NowaPustaKartaMontaz() {
                 return new KartaTechnMontaz("", ZleceniePLM.Factory.NoweZlecenieWgKoduZl(0)); // ZlecenieWczytanePoprawnie -> false
             }

@@ -26,7 +26,7 @@ namespace DocTechn.KartyRozkrojow
             }
             string nesIdTxt = SqlService.PobierzPojedynczyString(BazaDanych.Plm, "NESTING", "NES_ID", $"NES_Bon={nesBon}", out string blad1);
             if (!blad1.IsNullOrEmpty() || !int.TryParse(nesIdTxt, out int nesId)) {
-                Bledy.Add($"Błąd wczytywania rozkroju: {kodKresk}");
+                Bledy.Add($"Błąd wczytywania rozkroju {kodKresk} [{blad1}]");
                 return -1;
             }
             string barId    = SqlService.PobierzPojedynczyString(BazaDanych.Plm, "NESTBAR", "BAR_ID", $"NES_ID={nesId} AND BAR_IDT={barIdt}", out string blad2);
