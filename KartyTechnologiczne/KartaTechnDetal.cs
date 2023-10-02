@@ -47,8 +47,8 @@ namespace DocTechn.KartyTechnologiczne
             }
             protected set { }
         }
-        public override bool Hold => DaneDbProton.Any(d => d[17].Equals("HOLD")); // DaneDbAsprova.Any(d => d[16].Equals("HOLD"));
-        public override bool Uwolniony => DaneDbProton.Any(d => d[17].Equals("UWOLNIONE")); // DaneDbAsprova.Any(d => d[16].Equals("UWOLNIONE"));
+        public override bool Hold => DaneDbProton.Any(d => d[17].Equals("1")); // HOLD
+        public override bool Uwolniony => DaneDbProton.Any(d => d[17].Equals("2")); // UWOLNIONY
         public override StatusWykonania Status => _statusWyk ??= UstawStatusWykonania();
         //public override List<OperacjaAsprova> Operacje => _operacjeAsprova ??= WczytajOperacjeAsprova();
         public override List<OperacjaRozpProton> Operacje => _operacjeProton ??= WczytajOperacjeProton();
@@ -83,7 +83,7 @@ namespace DocTechn.KartyTechnologiczne
         private IEnumerable<string[]> WczytajDaneProton() {
             string polecenieSQL = "SELECT d.Atest, d.Wytop, d.Gilotyny_dziurkarki_id, d.Prostowanie_id, d.Pily_id, d.Palniki_id, d.Przekazanie_id, d.Wiertarki_id, " + 
                                             "d.Obrobka_krawedzi_id, d.Spawanie_blachownic_id, d.Fazy_id, d.Laser_id, d.Plazma_id, d.Frezarka_id, d.Kooperacja_id, " +
-                                            "d.Montaz_id, d.Prasy_id, d.Cecha_na_twardo_id, d.HOLD_opis, d.Miejsce_skladowania " +
+                                            "d.Montaz_id, d.Prasy_id, d.Cecha_na_twardo_id, d.Status_id, d.Miejsce_skladowania " + // HOLD_opis
                                   "FROM PROJ_NAGLOWKI_PROJEKTOW AS zl INNER JOIN " +
                                         "ROZ_GRUPY AS gr ON zl.Id = gr.Naglowek_Projektu_id INNER JOIN " +
                                         "ROZ_POZYCJE_WKE AS lp ON gr.Id = lp.Grupa_id INNER JOIN " +

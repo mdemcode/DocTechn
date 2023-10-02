@@ -7,6 +7,7 @@ namespace DocTechn.KartyRozkrojow
 
         public KartaRozkroju(string tekstKoduKresk) : base(tekstKoduKresk) {
             int idRozkr = OdczytajIdZKoduKresk(tekstKoduKresk);
+            if (idRozkr == -1) return;
             Rozkroj = new RozkrojPLM(idRozkr);
             if (!Rozkroj.RozkrojWczytanyPoprawnie) Bledy.Add($"Błąd wczytywania rozkroju: {tekstKoduKresk}");
         }
