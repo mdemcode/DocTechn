@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>DocTechn</id>
-    <version>2023.09.15.1</version>
+    <version>2023.10.02</version>
     <title>DocTechn</title>
     <authors>MDemCode</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -11,7 +11,7 @@
 	Library of technological document`s models.
 WARNING! An additional libraries (BasicSqlService.dll, ModelPLM.dll) is required to work properly!
     </description>
-    <releaseNotes>poprawki drobne</releaseNotes>
+    <releaseNotes>Poprawka Hold w KT-detal</releaseNotes>
     <copyright>Copyright MDemCode (C) 2023</copyright>
     <tags>dokumenty technologiczne</tags>
   </metadata>

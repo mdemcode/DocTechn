@@ -48,7 +48,8 @@ namespace DocTechn
             SkladaniePozycji = 19,   //             //                // oper_10
             SpawaniePozycji = 20,    //  O13        //                // oper_20
             FrezowaniePozycji = 21,  //             //                // oper_30
-            //
+            SrutowaniePozycji = 22,  //             //
+                                     //             //
             Wszystkie = -1           // O14         //
         }
     }
