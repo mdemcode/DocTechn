@@ -58,7 +58,8 @@ namespace DocTechn.KartyTechnologiczne
                 }
                 DetalPLM detal = DetalPLM.Factory.NowyDetalWgIdZlecINumeruPrzewodnika(zl.IdDB, kodKreskSplit[2].Trim());
                 return new KartaTechnDetal(zl, detal);
-            }/// <summary> Tylko dla potrzeb okreśenia DataContextu dla LbSkanowanePrzewodniki </summary>
+            }
+            /// <summary> Tylko dla potrzeb okreśenia DataContextu dla LbSkanowanePrzewodniki </summary>
             public static KartaTechnDetal NowaPustaKartaDetal() {
                 return new KartaTechnDetal("", ZleceniePLM.Factory.NoweZlecenieWgKoduZl(0));
             }
@@ -68,7 +69,7 @@ namespace DocTechn.KartyTechnologiczne
             public static KartaTechnMontaz NowaKartaMontaz(string kodKreskTxt, out bool blad) {
                 blad = false;
                 string[] kodKrSplit = kodKreskTxt.Trim().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                if (kodKrSplit.Length < 3 || !int.TryParse(kodKrSplit[0], out int kodZl)) {
+                if (kodKrSplit.Length < 2 || !int.TryParse(kodKrSplit[0], out int kodZl)) {
                     blad = true; // błędny kod kreskowy
                     return new KartaTechnMontaz("", ZleceniePLM.Factory.NoweZlecenieWgKoduZl(0)); // ZlecenieWczytanePoprawnie -> false
                 }
@@ -78,13 +79,14 @@ namespace DocTechn.KartyTechnologiczne
             public static KartaTechnMontaz NowaKartaMontazPLM(string kodKreskTxt, out bool blad) {
                 blad = false;
                 string[] kodKrSplit = kodKreskTxt.Trim().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                if (kodKrSplit.Length < 3) {
+                if (kodKrSplit.Length < 2) {
                     blad = true;                                                                  // błędny kod kreskowy
                     return new KartaTechnMontaz("", ZleceniePLM.Factory.NoweZlecenieWgKoduZl(0)); // ZlecenieWczytanePoprawnie -> false
                 }
                 ZleceniePLM zl = ZleceniePLM.Factory.NoweZlecenieWgNumeruZl(kodKrSplit[0]);
                 return new KartaTechnMontaz(kodKreskTxt, zl);
-            }/// <summary> Tylko dla potrzeb okreśenia DataContextu dla LbSkanowanePrzewodniki </summary>
+            }
+            /// <summary> Tylko dla potrzeb okreśenia DataContextu dla LbSkanowanePrzewodniki </summary>
             public static KartaTechnMontaz NowaPustaKartaMontaz() {
                 return new KartaTechnMontaz("", ZleceniePLM.Factory.NoweZlecenieWgKoduZl(0)); // ZlecenieWczytanePoprawnie -> false
             }

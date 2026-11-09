@@ -49,7 +49,7 @@ namespace DocTechn
             SpawaniePozycji = 20,    //  O13        //                // oper_20
             FrezowaniePozycji = 21,  //             //                // oper_30
             SrutowaniePozycji = 22,  //             //
-                                     //             //
+            Mazak = 23,              //             //
             Wszystkie = -1           // O14         //
         }
     }

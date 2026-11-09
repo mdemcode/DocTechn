@@ -11,16 +11,16 @@ namespace DocTechn.KartyTechnologiczne
 
         public KartaTechnMontaz(string tekstKoduKresk, ZleceniePLM zlecPLM) : base(tekstKoduKresk, zlecPLM) {
             string[] kodKrSplit = tekstKoduKresk.Trim().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            if (kodKrSplit.Length < 3) {
+            if (kodKrSplit.Length < 2) {
                 Bledy.Add("KM - Błędny kod kreskowy");
                 return;
             }
             _sztWyk                    = -1;                                // wszystkie szt.
             Lp                         = kodKrSplit[kodKrSplit.Length - 1]; // ostatnia pozycja tablicy
-            NrGr                       = OkreslNrGr(kodKrSplit);
+            //NrGr                       = OkreslNrGr(kodKrSplit);
             if (WczytajDaneProton(out string[] daneProton)) {
-                Szt       = daneProton[0].IsNullOrEmpty() || daneProton[0].Equals("{NULL}") ? -1 : int.Parse(daneProton[0]);
-                Hold      = false; //!daneAsprova[1].IsNullOrEmpty() && daneAsprova[1].Equals("HOLD");
+                Szt = daneProton[0].IsNullOrEmpty() || daneProton[0].Equals("{NULL}") ? -1 : int.Parse(daneProton[0]);
+                Hold = false; //!daneAsprova[1].IsNullOrEmpty() && daneAsprova[1].Equals("HOLD");
                 Uwolniony = true; //!daneAsprova[1].IsNullOrEmpty() && daneAsprova[1].Equals("UWOLNIONE");
                 Operacje = new List<OperacjaRozpProton> {
                     new(OperacjaRozpProton.TypOperacji.SkladaniePozycji, daneProton[1]),
@@ -28,6 +28,7 @@ namespace DocTechn.KartyTechnologiczne
                     new(OperacjaRozpProton.TypOperacji.FrezowaniePozycji, daneProton[3])
                 };
                 Status = UstawStatusWykonania(daneProton[1], daneProton[2], daneProton[3]);
+                NrGr   = daneProton[4];
             }
             else Bledy.Add("KM - Błąd wczytywania danych z rozpiski Proton!");
         }
@@ -51,12 +52,17 @@ namespace DocTechn.KartyTechnologiczne
 
         private bool WczytajDaneProton(out string[] daneOut) {
             daneOut = null;
-            string polecenieSQL = "SELECT lp.Ilosc_szt, lp.Skladania_WKE_id, lp.Spawanie_WKE_id, lp.Frezowanie_WKE_id " +
+            //string polecenieSQL = "SELECT lp.Ilosc_szt, lp.Skladania_WKE_id, lp.Spawanie_WKE_id, lp.Frezowanie_WKE_id " +
+            //                      "FROM ROZ_POZYCJE_WKE AS lp INNER JOIN " +
+            //                            "ROZ_GRUPY AS g ON lp.Grupa_id = g.Id INNER JOIN " +
+            //                            "PROJ_NAGLOWKI_PROJEKTOW AS p ON g.Naglowek_Projektu_id = p.Id " +
+            //                      $"WHERE (p.Numer_projektu = '{NrZlec}') AND (g.Numer_grupy = '{NrGr}') AND (lp.Nr_pozycji_WW = '{Lp}')";
+            string polecenieSQL = "SELECT lp.Ilosc_szt, lp.Skladania_WKE_id, lp.Spawanie_WKE_id, lp.Frezowanie_WKE_id, g.Numer_grupy " +
                                   "FROM ROZ_POZYCJE_WKE AS lp INNER JOIN " +
-                                        "ROZ_GRUPY AS g ON lp.Grupa_id = g.Id INNER JOIN " +
-                                        "PROJ_NAGLOWKI_PROJEKTOW AS p ON g.Naglowek_Projektu_id = p.Id " +
-                                  $"WHERE (p.Numer_projektu = '{NrZlec}') AND (g.Numer_grupy = '{NrGr}') AND (lp.Nr_pozycji_WW = '{Lp}')";
-            IEnumerable<string[]> daneDB = SqlService.PobierzDaneZBazy(BazaDanych.Proton, polecenieSQL, 4, out string blad).ToList();
+                                  "ROZ_GRUPY AS g ON lp.Grupa_id = g.Id INNER JOIN " +
+                                  "PROJ_NAGLOWKI_PROJEKTOW AS p ON g.Naglowek_Projektu_id = p.Id " +
+                                  $"WHERE (p.Numer_projektu = '{NrZlec}') AND (lp.Nr_pozycji_WW = '{Lp}')";
+            IEnumerable<string[]> daneDB = SqlService.PobierzDaneZBazy(BazaDanych.Proton, polecenieSQL, 5, out string blad).ToList();
             bool                  ok     = daneDB.Any();
             if (ok) daneOut = daneDB.First();
             return ok; //true;
@@ -87,11 +93,11 @@ namespace DocTechn.KartyTechnologiczne
         }
         private static StatusWykonania UstawStatusWykonania(string op10, string op20, string op30) {
             return (op10, op20, op30) switch {
-                ("V", "V", _) => StatusWykonania.DoWydania,
-                (_, "V", _) => StatusWykonania.Wydany,
-                ("W", "W", "W") => StatusWykonania.Wykonany,
-                ("W", "W", _) => StatusWykonania.Pospawany,
-                ("W", _, _) => StatusWykonania.Zlozony,
+                ("19", "19", _) => StatusWykonania.DoWydania,
+                (_, "19", _) => StatusWykonania.Wydany,
+                ("20", "20", "20") => StatusWykonania.Wykonany,
+                ("20", "20", _) => StatusWykonania.Pospawany,
+                ("20", _, _) => StatusWykonania.Zlozony,
                 (_, _, _) => StatusWykonania.Nieznany
             };
         }
